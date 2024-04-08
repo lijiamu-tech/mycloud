@@ -52,3 +52,41 @@ VALUES (1, 'google', 'google_access_token_1', 'Bearer', '2024-04-01 00:00:00'),
 INSERT INTO provider_user_info (user_id, provider_name, username, avatar_url, email, gender, birthday)
 VALUES (1, 'google', 'user1_google', 'https://google-avatar-url.com/user1', 'user1@google.com', 'male', '1990-01-01'),
        (2, 'facebook', 'user2_facebook', 'https://facebook-avatar-url.com/user2', 'user2@facebook.com', 'female', '1995-05-05');
+
+
+CREATE TABLE device_info (
+    device_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '设备ID',
+    device_name VARCHAR(255) NOT NULL COMMENT '设备名称',
+    device_model VARCHAR(255) COMMENT '设备型号',
+    manufacturer VARCHAR(255) COMMENT '生产厂商',
+    location VARCHAR(255) COMMENT '安装位置'
+);
+
+CREATE TABLE device_status (
+    status_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '状态ID',
+    device_id INT NOT NULL COMMENT '设备ID',
+    status_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '状态时间',
+    current_status VARCHAR(50) COMMENT '现在状态',
+    FOREIGN KEY (device_id) REFERENCES device_info(device_id)
+);
+
+CREATE TABLE device_log (
+    log_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '日志ID',
+    device_id INT NOT NULL COMMENT '设备ID',
+    log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '日志时间',
+    log_type VARCHAR(50) COMMENT '日志类型',
+    log_content VARCHAR(255) COMMENT '日志信息',
+    FOREIGN KEY (device_id) REFERENCES device_info(device_id)
+); 
+
+INSERT INTO device_info (device_name, device_model, manufacturer, location)
+VALUES ('设备1', '型号1', '厂商1', '位置1'),
+       ('设备2', '型号2', '厂商2', '位置2');
+
+INSERT INTO device_status (device_id, current_status)
+VALUES (1, '正常'),
+       (2, '故障');
+
+INSERT INTO device_log (device_id, log_type, log_content)
+VALUES (1, '报警', '设备1发生故障'),
+       (2, '操作记录', '设备2进行了维护');
