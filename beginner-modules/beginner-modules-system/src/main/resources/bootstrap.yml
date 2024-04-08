@@ -1,0 +1,19 @@
+server:
+  port: 8001
+spring:
+  profiles:
+    active: dev
+  application:
+    name: beginner-modules-system
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.43.12:8848
+        namespace: mycloud
+      config:
+        server-addr: 192.168.43.12:8848
+        namespace: mycloud
+        file-extension: yml
+        shared-configs:
+          - data-id: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+

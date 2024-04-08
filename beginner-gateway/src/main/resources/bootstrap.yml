@@ -1,0 +1,21 @@
+server:
+  port: 8060
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: beginner-gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.43.12:8848
+        namespace: mycloud
+        file-extension: yml
+        shared-configs:
+          - data-id: application.${spring.profiles.active}
+            refresh: true
+
+      discovery:
+        server-addr: 192.168.43.12:8848
+        namespace: mycloud

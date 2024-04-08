@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beginner.device.mapper.DeviceInfoVOMapper">
+
+    <resultMap type="com.beginner.device.entity.vo.DeviceInfoVO" id="DeviceInfoVOMap">
+        <result property="statusId" column="status_id" jdbcType="INTEGER"/>
+        <result property="deviceId" column="device_id" jdbcType="INTEGER"/>
+        <result property="deviceName" column="device_name" jdbcType="VARCHAR"/>
+        <result property="deviceModel" column="device_model" jdbcType="VARCHAR"/>
+        <result property="currentStatus" column="current_status" jdbcType="VARCHAR"/>
+        <result property="statusTime" column="status_time" jdbcType="TIMESTAMP"/>
+        <result property="manufacturer" column="manufacturer" jdbcType="VARCHAR"/>
+        <result property="location" column="location" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="DeviceInfoMap" type="com.beginner.device.entity.DeviceInfo">
+        <result property="deviceId" column="device_id" jdbcType="INTEGER"/>
+        <result property="deviceName" column="device_name" jdbcType="VARCHAR"/>
+        <result property="deviceModel" column="device_model" jdbcType="VARCHAR"/>
+        <result property="manufacturer" column="manufacturer" jdbcType="VARCHAR"/>
+        <result property="location" column="location" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="DeviceStatusMap" type="com.beginner.device.entity.DeviceStatus">
+        <result property="statusId" column="status_id" jdbcType="INTEGER"/>
+        <result property="deviceId" column="device_id" jdbcType="INTEGER"/>
+        <result property="currentStatus" column="current_status" jdbcType="VARCHAR"/>
+        <result property="statusTime" column="status_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectDeviceInfoVOPage" resultMap="DeviceInfoVOMap">
+        select  i.device_id, i.device_name, i.device_model, i.manufacturer, i.location,
+                s.status_id, s.status_time, s.current_status
+        from device_info as i left join device_status as s on i.device_id = s.device_id
+        <where>
+            <if test="deviceInfoVO.deviceId != null ">and i.device_id = #{deviceInfoVO.deviceId}</if>
+            <if test="deviceInfoVO.deviceName != null and deviceInfoVO.deviceName != ''">
+                and device_name like concat('%',#{deviceInfoVO.deviceName},'%')
+            </if>
+            <if test="deviceInfoVO.deviceModel != null and deviceInfoVO.deviceModel != ''">
+                and device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
+            </if>
+            <if test="deviceInfoVO.currentStatus != null and deviceInfoVO.currentStatus != ''">
+                and current_status = #{deviceInfoVO.currentStatus}
+            </if>
+            <if test="deviceInfoVO.statusTime != null">
+                and status_time = #{deviceInfoVO.statusTime}
+            </if>
+            <if test="deviceInfoVO.manufacturer != null and deviceInfoVO.manufacturer != ''">
+                and manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
+            </if>
+            <if test="deviceInfoVO.location != null and deviceInfoVO.location != ''">
+                and location like concat('%',#{deviceInfoVO.location},'%')
+            </if>
+        </where>
+        order by i.device_id
+    </select>
+
+    <select id="selectDeviceInfoVOList" resultMap="DeviceInfoVOMap">
+        select  i.device_id, i.device_name, i.device_model, i.manufacturer, i.location,
+                s.status_id, s.status_time, s.current_status
+        from device_info as i left join device_status as s on i.device_id = s.device_id
+        <where>
+            <if test="deviceInfoVO.deviceId != null ">and i.device_id = #{deviceInfoVO.deviceId}</if>
+            <if test="deviceInfoVO.deviceName != null and deviceInfoVO.deviceName != ''">
+                and device_name like concat('%',#{deviceInfoVO.deviceName},'%')
+            </if>
+            <if test="deviceInfoVO.deviceModel != null and deviceInfoVO.deviceModel != ''">
+                and device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
+            </if>
+            <if test="deviceInfoVO.currentStatus != null and deviceInfoVO.currentStatus != ''">
+                and current_status = #{deviceInfoVO.currentStatus}
+            </if>
+            <if test="deviceInfoVO.statusTime != null ">
+                and status_time = #{deviceInfoVO.statusTime}
+            </if>
+            <if test="deviceInfoVO.manufacturer != null and deviceInfoVO.manufacturer != ''">
+                and manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
+            </if>
+            <if test="deviceInfoVO.location != null and deviceInfoVO.location != ''">
+                and location like concat('%',#{deviceInfoVO.location},'%')
+            </if>
+        </where>
+        order by i.device_id
+    </select>
+
+    <select id="selectDeviceInfoList" resultMap="DeviceInfoMap">
+        select  * from device_info
+        <where>
+            <if test="deviceInfo.deviceId != null ">and device_id = #{deviceInfo.deviceId}</if>
+            <if test="deviceInfo.deviceName != null and deviceInfo.deviceName != ''">
+                and device_name like concat('%',#{deviceInfo.deviceName},'%')
+            </if>
+            <if test="deviceInfo.deviceModel != null and deviceInfo.deviceModel != ''">
+                and device_model like concat('%',#{deviceInfo.deviceModel},'%')
+            </if>
+            <if test="deviceInfo.manufacturer != null and deviceInfo.manufacturer != ''">
+                and manufacturer like concat('%',#{deviceInfo.manufacturer},'%')
+            </if>
+            <if test="deviceInfo.location != null and deviceInfo.location != ''">
+                and location like concat('%',#{deviceInfo.location},'%')
+            </if>
+        </where>
+        order by device_id
+    </select>
+
+    <select id="selectDeviceInfoVOCount" resultType="java.lang.Long">
+        select  COALESCE(COUNT(*), 0) AS count
+        from device_info as i left join device_status as s on i.device_id = s.device_id
+        <where>
+            <if test="deviceInfoVO.deviceId != null ">and i.device_id = #{deviceInfoVO.deviceId}</if>
+            <if test="deviceInfoVO.deviceName != null and deviceInfoVO.deviceName != ''">
+                and device_name like concat('%',#{deviceInfoVO.deviceName},'%')
+            </if>
+            <if test="deviceInfoVO.deviceModel != null and deviceInfoVO.deviceModel != ''">
+                and device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
+            </if>
+            <if test="deviceInfoVO.currentStatus != null and deviceInfoVO.currentStatus != ''">
+                and current_status = #{deviceInfoVO.currentStatus}
+            </if>
+            <if test="deviceInfoVO.statusTime != null ">
+                and status_time = #{deviceInfoVO.statusTime}
+            </if>
+            <if test="deviceInfoVO.manufacturer != null and deviceInfoVO.manufacturer != ''">
+                and manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
+            </if>
+            <if test="deviceInfoVO.location != null and deviceInfoVO.location != ''">
+                and location like concat('%',#{deviceInfoVO.location},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectDeviceStatusCount" resultType="java.lang.Long">
+        select  COALESCE(COUNT(*), 0) AS count
+        from device_status where
+            device_id = #{deviceId}
+    </select>
+
+    <!-- 新增设备信息 -->
+    <insert id="insertDeviceInfo" parameterType="com.beginner.device.entity.DeviceInfo">
+        insert into device_info (device_name, device_model, manufacturer, location)
+        values (#{DeviceInfo.deviceName}, #{DeviceInfo.deviceModel}, #{DeviceInfo.manufacturer}, #{DeviceInfo.location})
+    </insert>
+
+    <insert id="insertDeviceStatus" parameterType="com.beginner.device.entity.DeviceStatus">
+        insert into device_status (device_id, current_status, status_time)
+        values (#{DeviceStatus.deviceId}, #{DeviceStatus.currentStatus}, #{DeviceStatus.statusTime})
+    </insert>
+
+    <!-- 修改设备信息 -->
+    <update id="updateDeviceInfo" parameterType="com.beginner.device.entity.DeviceInfo">
+        update device_info
+        <set>
+            <if test="DeviceInfo.deviceName != null and DeviceInfo.deviceName != ''">
+                device_name = #{DeviceInfo.deviceName},
+            </if>
+            <if test="DeviceInfo.deviceModel != null and DeviceInfo.deviceModel != ''">
+                device_model = #{DeviceInfo.deviceModel},
+            </if>
+            <if test="DeviceInfo.manufacturer != null and DeviceInfo.manufacturer != ''">
+                manufacturer = #{DeviceInfo.manufacturer},
+            </if>
+            <if test="DeviceInfo.location != null and DeviceInfo.location != ''">
+                location = #{DeviceInfo.location},
+            </if>
+        </set>
+        where device_id = #{DeviceInfo.deviceId}
+    </update>
+
+    <update id="updateDeviceStatus" parameterType="com.beginner.device.entity.DeviceStatus">
+        update device_status
+        <set>
+            <if test="DeviceStatus.currentStatus != null and DeviceStatus.currentStatus != ''">
+                current_status = #{DeviceStatus.currentStatus},
+            </if>
+            <if test="DeviceStatus.StatusTime != null ">
+                status_time = #{DeviceStatus.StatusTime},
+            </if>
+        </set>
+        where device_id = #{DeviceStatus.deviceId} and status_id = #{DeviceStatus.statusId}
+    </update>
+
+    <!-- 删除设备信息 -->
+    <delete id="deleteDeviceInfo" parameterType="int">
+        delete from device_info
+        where device_id = #{DeviceInfo.deviceId}
+    </delete>
+
+    <!-- 删除设备状态 -->
+    <delete id="deleteDeviceStatus" parameterType="int">
+        delete from device_status
+        where device_id = #{DeviceStatus.deviceId} and status_id = #{DeviceStatus.statusId}
+    </delete>
+
+
+</mapper>
+
