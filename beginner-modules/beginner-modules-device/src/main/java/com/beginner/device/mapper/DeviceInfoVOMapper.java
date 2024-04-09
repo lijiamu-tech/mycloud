@@ -20,6 +20,8 @@ public interface DeviceInfoVOMapper extends BaseMapper<DeviceInfoVO> {
 
     DeviceInfo selectDeviceInfoList(@Param("deviceInfo") DeviceInfo deviceInfo);
 
+    DeviceStatus selectDeviceStatusList(@Param("deviceStatus") DeviceStatus deviceStatus);
+
     long selectDeviceInfoVOCount(@Param("deviceInfoVO") DeviceInfoVO deviceInfoVO);
     long selectDeviceStatusCount(Integer id);
 

@@ -33,23 +33,24 @@
         from device_info as i left join device_status as s on i.device_id = s.device_id
         <where>
             <if test="deviceInfoVO.deviceId != null ">and i.device_id = #{deviceInfoVO.deviceId}</if>
+            <if test="deviceInfoVO.statusId != null ">and s.status_id = #{deviceInfoVO.statusId}</if>
             <if test="deviceInfoVO.deviceName != null and deviceInfoVO.deviceName != ''">
-                and device_name like concat('%',#{deviceInfoVO.deviceName},'%')
+                and i.device_name like concat('%',#{deviceInfoVO.deviceName},'%')
             </if>
             <if test="deviceInfoVO.deviceModel != null and deviceInfoVO.deviceModel != ''">
-                and device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
+                and i.device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
             </if>
             <if test="deviceInfoVO.currentStatus != null and deviceInfoVO.currentStatus != ''">
-                and current_status = #{deviceInfoVO.currentStatus}
+                and s.current_status = #{deviceInfoVO.currentStatus}
             </if>
-            <if test="deviceInfoVO.statusTime != null">
-                and status_time = #{deviceInfoVO.statusTime}
+            <if test="deviceInfoVO.statusTime != null ">
+                and s.status_time = #{deviceInfoVO.statusTime}
             </if>
             <if test="deviceInfoVO.manufacturer != null and deviceInfoVO.manufacturer != ''">
-                and manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
+                and i.manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
             </if>
             <if test="deviceInfoVO.location != null and deviceInfoVO.location != ''">
-                and location like concat('%',#{deviceInfoVO.location},'%')
+                and i.location like concat('%',#{deviceInfoVO.location},'%')
             </if>
         </where>
         order by i.device_id
@@ -61,23 +62,24 @@
         from device_info as i left join device_status as s on i.device_id = s.device_id
         <where>
             <if test="deviceInfoVO.deviceId != null ">and i.device_id = #{deviceInfoVO.deviceId}</if>
+            <if test="deviceInfoVO.statusId != null ">and s.status_id = #{deviceInfoVO.statusId}</if>
             <if test="deviceInfoVO.deviceName != null and deviceInfoVO.deviceName != ''">
-                and device_name like concat('%',#{deviceInfoVO.deviceName},'%')
+                and i.device_name like concat('%',#{deviceInfoVO.deviceName},'%')
             </if>
             <if test="deviceInfoVO.deviceModel != null and deviceInfoVO.deviceModel != ''">
-                and device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
+                and i.device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
             </if>
             <if test="deviceInfoVO.currentStatus != null and deviceInfoVO.currentStatus != ''">
-                and current_status = #{deviceInfoVO.currentStatus}
+                and s.current_status = #{deviceInfoVO.currentStatus}
             </if>
             <if test="deviceInfoVO.statusTime != null ">
-                and status_time = #{deviceInfoVO.statusTime}
+                and s.status_time = #{deviceInfoVO.statusTime}
             </if>
             <if test="deviceInfoVO.manufacturer != null and deviceInfoVO.manufacturer != ''">
-                and manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
+                and i.manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
             </if>
             <if test="deviceInfoVO.location != null and deviceInfoVO.location != ''">
-                and location like concat('%',#{deviceInfoVO.location},'%')
+                and i.location like concat('%',#{deviceInfoVO.location},'%')
             </if>
         </where>
         order by i.device_id
@@ -103,28 +105,44 @@
         order by device_id
     </select>
 
+    <select id="selectDeviceStatusList" resultMap="DeviceStatusMap">
+        select  * from device_status
+        <where>
+            <if test="deviceStatus.deviceId != null ">and device_id = #{deviceStatus.deviceId}</if>
+            <if test="deviceStatus.statusId != null ">and status_id = #{deviceStatus.statusId}</if>
+            <if test="deviceStatus.currentStatus != null and deviceStatus.currentStatus != ''">
+                and current_status = #{deviceStatus.currentStatus}
+            </if>
+            <if test="deviceStatus.statusTime != null ">
+                and status_time = #{deviceStatus.statusTime}
+            </if>
+        </where>
+        order by status_id
+    </select>
+
     <select id="selectDeviceInfoVOCount" resultType="java.lang.Long">
         select  COALESCE(COUNT(*), 0) AS count
         from device_info as i left join device_status as s on i.device_id = s.device_id
         <where>
             <if test="deviceInfoVO.deviceId != null ">and i.device_id = #{deviceInfoVO.deviceId}</if>
+            <if test="deviceInfoVO.statusId != null ">and s.status_id = #{deviceInfoVO.statusId}</if>
             <if test="deviceInfoVO.deviceName != null and deviceInfoVO.deviceName != ''">
-                and device_name like concat('%',#{deviceInfoVO.deviceName},'%')
+                and i.device_name like concat('%',#{deviceInfoVO.deviceName},'%')
             </if>
             <if test="deviceInfoVO.deviceModel != null and deviceInfoVO.deviceModel != ''">
-                and device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
+                and i.device_model like concat('%',#{deviceInfoVO.deviceModel},'%')
             </if>
             <if test="deviceInfoVO.currentStatus != null and deviceInfoVO.currentStatus != ''">
-                and current_status = #{deviceInfoVO.currentStatus}
+                and s.current_status = #{deviceInfoVO.currentStatus}
             </if>
             <if test="deviceInfoVO.statusTime != null ">
-                and status_time = #{deviceInfoVO.statusTime}
+                and s.status_time = #{deviceInfoVO.statusTime}
             </if>
             <if test="deviceInfoVO.manufacturer != null and deviceInfoVO.manufacturer != ''">
-                and manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
+                and i.manufacturer like concat('%',#{deviceInfoVO.manufacturer},'%')
             </if>
             <if test="deviceInfoVO.location != null and deviceInfoVO.location != ''">
-                and location like concat('%',#{deviceInfoVO.location},'%')
+                and i.location like concat('%',#{deviceInfoVO.location},'%')
             </if>
         </where>
     </select>
@@ -176,7 +194,7 @@
                 status_time = #{DeviceStatus.StatusTime},
             </if>
         </set>
-        where device_id = #{DeviceStatus.deviceId} and status_id = #{DeviceStatus.statusId}
+        where status_id = #{DeviceStatus.statusId}
     </update>
 
     <!-- 删除设备信息 -->

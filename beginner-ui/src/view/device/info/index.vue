@@ -6,7 +6,7 @@
         <el-form-item label="设备名称" label-width="80px" style="margin-top: 20px;margin-left: 20px;font-weight: bold">
           <el-input
             v-model="deviceForm.deviceName"
-            placeholder="请输入用户名称"
+            placeholder="请输入设备名称"
             clearable
             class="el-input-name"></el-input>
         </el-form-item>
@@ -74,8 +74,8 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="StatusTime"
-          key = 'StatusTime'
+          prop="statusTime"
+          key = 'statusTime'
           label="状态时间"
           sortable
           show-overflow-tooltip>
@@ -203,16 +203,16 @@ export default {
       },
       rules: {
         deviceName: [
-          {required: true, message: "用户名称不能为空", trigger: "blur"}
+          {required: true, message: "设备名称不能为空", trigger: "blur"}
         ],
         manufacturer: [
-          {required: true, message: "用户密码不能为空", trigger: "blur"}
+          {required: true, message: "生产厂商不能为空", trigger: "blur"}
         ],
         currentStatus: [
-          {required: true, message: "用户密码不能为空", trigger: "blur"}
+          {required: true, message: "设备状态不能为空", trigger: "blur"}
         ],
         deviceModel: [
-          {required: true, message: "用户密码不能为空", trigger: "blur"}
+          {required: true, message: "设备型号不能为空", trigger: "blur"}
         ]
       }
     }
@@ -252,6 +252,7 @@ export default {
         this.reset();
         this.form.statusId = this.ids[0]
         queryAll(this.form).then(response =>{
+          console.log(response);
           this.form =  response.result[0];
           this.open = true;
           this.title = "修改设备信息";
@@ -259,7 +260,28 @@ export default {
       }
     },
     deleteDevice(){
-
+      this.$confirm('是否确认删除选中的数据项？','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function (){
+        return deleteDevice(this.ids);
+      }).then(() =>{
+        this.$notify({
+          title: "成功",
+          message: "删除成功！",
+          type: "success",
+          duration: 1500
+        });
+        this.getList();
+      }).catch(() =>{
+        this.$notify({
+          title: "警告",
+          message: "已取消删除！",
+          type: "warning",
+          duration: 1500
+        });
+      })
     },
     handleSizeChange(row){
       this.queryParam.size = row;
@@ -305,6 +327,12 @@ export default {
     handleQuery() {
       this.queryParam.page = 1;
       this.getList();
+      this.$notify({
+        title: "成功",
+        message: "查询成功",
+        type: "success",
+        duration: 1500
+      });
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -318,13 +346,23 @@ export default {
         if (valid) {
           if (this.form.statusId !== undefined) {
             updateDevice(this.form).then(response => {
-              this.$message("修改成功");
+              this.$notify({
+                title: "成功",
+                message: "修改成功",
+                type: "success",
+                duration: 1500
+              });
               this.open = false;
               this.resetQuery();
             });
           } else {
             addDevice(this.form).then(response => {
-              this.$message("新增成功");
+              this.$notify({
+                title: "成功",
+                message: "添加成功",
+                type: "success",
+                duration: 1500
+              });
               this.open = false;
               this.resetQuery();
             });

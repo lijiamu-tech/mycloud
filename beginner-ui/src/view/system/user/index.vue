@@ -289,7 +289,30 @@ export default {
       }
     },
     deleteUser(row){
-
+      // 删除用户逻辑
+      const userIds = row.userId || this.ids;
+      this.$confirm('是否确认删除用户编号为"' + userIds + '"的数据项？','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delUser(userIds);
+      }).then(() =>{
+        this.$notify({
+          title: "成功",
+          message: "删除成功！",
+          type: "success",
+          duration: 1500
+        });
+        this.getList();
+      }).catch(() =>{
+        this.$notify({
+          title: "警告",
+          message: "已取消删除！",
+          type: "warning",
+          duration: 1500
+        });
+      })
     },
     // 取消按钮
     cancel() {
@@ -339,13 +362,23 @@ export default {
         if (valid) {
           if (this.form.userId !== undefined) {
             updateUser(this.form).then(response => {
-              this.$message("修改成功");
+              this.$notify({
+                title: "成功",
+                message: "修改成功！",
+                type: "success",
+                duration: 1500
+              });
               this.open = false;
               this.resetQuery();
             });
           } else {
             addUser(this.form).then(response => {
-              this.$message("新增成功");
+              this.$notify({
+                title: "成功",
+                message: "添加成功！",
+                type: "success",
+                duration: 1500
+              });
               this.open = false;
               this.resetQuery();
             });

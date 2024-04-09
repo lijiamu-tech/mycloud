@@ -101,8 +101,11 @@ public class DeviceInfoVOService extends ServiceImpl<DeviceInfoVOMapper, DeviceI
 
             // 判断ids的长度是否为1，是否需要循环
         }else if (ids.size() == 1) {
-            if (deviceInfoVOMapper.selectDeviceStatusCount(ids.get(0)) > 0) {
-                result = deviceInfoVOMapper.deleteDeviceStatus(ids.get(0));
+            if (deviceInfoVOMapper.selectDeviceStatusCount(ids.get(0)) > 1) {
+                DeviceStatus deviceStatus = new DeviceStatus();
+                deviceStatus.setStatusId(ids.get(0));
+                Integer deviceId = deviceInfoVOMapper.selectDeviceStatusList(deviceStatus).getDeviceId();
+                result = deviceInfoVOMapper.deleteDeviceStatus(deviceId);
             }else {
                 result = deviceInfoVOMapper.deleteDeviceInfo(ids.get(0));
             }
@@ -110,8 +113,11 @@ public class DeviceInfoVOService extends ServiceImpl<DeviceInfoVOMapper, DeviceI
 
             // 利用循环依次删除
             for (int i = 0; i < ids.size(); i++) {
-                if (deviceInfoVOMapper.selectDeviceStatusCount(ids.get(i)) > 0) {
-                    result = result && deviceInfoVOMapper.deleteDeviceStatus(ids.get(i));
+                if (deviceInfoVOMapper.selectDeviceStatusCount(ids.get(i)) > 1) {
+                    DeviceStatus deviceStatus = new DeviceStatus();
+                    deviceStatus.setStatusId(ids.get(i));
+                    Integer deviceId = deviceInfoVOMapper.selectDeviceStatusList(deviceStatus).getDeviceId();
+                    result = result && deviceInfoVOMapper.deleteDeviceStatus(deviceId);
                 }else {
                     result = result && deviceInfoVOMapper.deleteDeviceInfo(ids.get(i));
                 }
