@@ -8,6 +8,8 @@
 
 # beginner-oauth   认证模块   jwt+shiro
 
+# beginner-api     接口模块   feign
+
 # beginner-common  公共模块   自定义token，
 
 # beginner-ui      前端模块   elementUI+axios
